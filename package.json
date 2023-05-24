@@ -3,15 +3,39 @@
   "version": "1.0.0",
   "description": "Node.js script to download all images from a Plex photo album",
   "main": "index.js",
-  "scripts": {
-    "test": "standard"
+  "bin": {
+    "plex-download": "./index.js"
   },
-  "author": "",
+  "author": "Andrew Bythell <abythell@ieee.org>",
   "license": "ISC",
+  "scripts": {
+    "lint": "eslint",
+    "preversion": "npm run lint",
+    "postversion": "git push && git push --tags"
+  },
   "dependencies": {
+    "commander": "^10.0.1",
+    "dotenv": "^16.0.3",
     "plex-api": "^5.3.1"
   },
   "devDependencies": {
-    "standard": "^14.3.4"
+    "eslint": "^8.41.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2021": true
+    },
+    "extends": "standard",
+    "overrides": [],
+    "parserOptions": {
+      "ecmaVersion": "latest"
+    },
+    "rules": {}
   }
 }
