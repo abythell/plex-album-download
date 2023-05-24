@@ -2,9 +2,9 @@
  * Download images from a Plex Photo Album
  * @copyright 2018 Andrew Bythell <abythell@ieee.org>
  */
-const dotenv = require('dotenv')
-const program = require('commander')
-const PlexDownload = require('./plex-download.js')
+import dotenv from 'dotenv'
+import { program } from 'commander'
+import PlexDownload from './plex-download.js'
 
 dotenv.config()
 program.option('-a, --album <name>', 'Plex album (playlist) name')

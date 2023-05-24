@@ -1,6 +1,7 @@
 {
   "name": "plex-album",
   "version": "1.0.0",
+  "type": "module",
   "description": "Node.js script to download all images from a Plex photo album",
   "main": "index.js",
   "bin": {

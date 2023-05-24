@@ -1,12 +1,12 @@
-const PlexAPI = require('plex-api')
-const fs = require('fs')
-const path = require('path/win32')
+import PlexAPI from 'plex-api'
+import fs from 'fs'
+import path from 'path'
 
 /**
  * Plex Album Downloader
  * @class
  */
-class PlexDownload {
+export default class PlexDownload {
   /**
    * Use PlexDownload.create() instead of invoking the constructor directly
    * @constructor
@@ -73,5 +73,3 @@ class PlexDownload {
     }
   }
 } // class
-
-module.exports = PlexDownload
