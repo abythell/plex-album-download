@@ -14,39 +14,7 @@ const client = new PlexAPI({
   username: 'your-plex-username',
   password: 'your-plex-password'
 })
-const ALBUM = 'your-album-to-be-saved'
-
-// List all playlists
-client.query('/playlists/').then((playlists) => {
-  // find photo album playlist
-  var album = playlists.MediaContainer.Metadata.find((album) => {
-    return album.title === ALBUM
-  })
-  // get details on the specified album
-  return client.query(album.key)
-}).then((images) => {
-  // create a directory for the album
-  if (!fs.existsSync(ALBUM)) {
-    fs.mkdirSync(ALBUM)
-  }
-  // fetch each image in the album in series, not in parallel to avoid 503
-  return images.MediaContainer.Metadata.reduce((chain, image) => {
-    // get image details
-    var media = image.Media[0].Part[0]
-    var filename = path.basename(media.file)
-    return chain.then(() => {
-      // save image to disk
-      var filepath = path.join(ALBUM, filename)
-      return saveImage(media.key, filepath)
-    })
-  }, Promise.resolve())
-}).then(() => {
-  console.log('Done')
-  process.exit(0)
-}).catch((err) => {
-  console.log(err)
-  process.exit(1)
-})
+const ALBUM = 'your-album-name'
 
 /**
  * Get an image from Plex and save it to disk
@@ -60,3 +28,29 @@ function saveImage (key, filename) {
     fs.writeFileSync(filename, buffer)
   })
 }
+
+/**
+ * Get a Plex Album
+ * @param {string} name - Album name
+ * @returns {Promise<PlexAPI.MediaContainer.Metadata>} Plex Album Metadata
+ */
+async function getAlbum (name) {
+  const playlists = await client.query('/playlists')
+  return playlists.MediaContainer.Metadata.find((album) => {
+    return album.title === name
+  })
+}
+
+async function main () {
+  const album = await getAlbum(ALBUM)
+  const images = await client.query(album.key)
+  if (!fs.existsSync(ALBUM)) fs.mkdirSync(ALBUM)
+  for (const image of images.MediaContainer.Metadata) {
+    const media = image.Media[0].Part[0]
+    const filename = path.basename(media.file)
+    const filepath = path.join(ALBUM, filename)
+    await saveImage(media.key, filepath)
+  }
+}
+
+main().catch(console.error)
